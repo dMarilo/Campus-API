@@ -7,6 +7,7 @@ use App\Http\Controllers\MealController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\ProfessorController;
 use App\Http\Controllers\ClassController;
+use App\Http\Controllers\ClassroomController;
 
 //---
 
@@ -57,3 +58,8 @@ Route::post('/professors', [ProfessorController::class, 'store']);
 Route::get('/classes', [ClassController::class, 'index']);
 Route::get('/classes/search', [ClassController::class, 'search']);
 Route::post('/classes', [ClassController::class, 'store']);
+
+
+// routes/api.php
+Route::get('/classrooms', [ClassroomController::class, 'index']);
+
