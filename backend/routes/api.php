@@ -6,6 +6,7 @@ use App\Http\Controllers\LibraryController;
 use App\Http\Controllers\MealController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\ProfessorController;
+use App\Http\Controllers\ClassController;
 
 //---
 
@@ -52,3 +53,7 @@ Route::put('/students/{id}/upgrade', [StudentController::class, 'upgrade']);
 Route::get('/professors', [ProfessorController::class, 'index']);
 Route::get('/professors/search', [ProfessorController::class, 'search']);
 Route::post('/professors', [ProfessorController::class, 'store']);
+
+Route::get('/classes', [ClassController::class, 'index']);
+Route::get('/classes/search', [ClassController::class, 'search']);
+Route::post('/classes', [ClassController::class, 'store']);
