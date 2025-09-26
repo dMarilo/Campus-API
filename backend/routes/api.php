@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LibraryController;
 use App\Http\Controllers\MealController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\ProfessorController;
 
 //---
 
@@ -48,3 +49,6 @@ Route::post('/students', [StudentController::class, 'store']);
 Route::put('/students/{id}/upgrade', [StudentController::class, 'upgrade']);
 
 
+Route::get('/professors', [ProfessorController::class, 'index']);
+Route::get('/professors/search', [ProfessorController::class, 'search']);
+Route::post('/professors', [ProfessorController::class, 'store']);
