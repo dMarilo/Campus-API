@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LibraryController;
 use App\Http\Controllers\DormController;
+use App\Http\Controllers\RoomController;
 
 //---
 
@@ -42,6 +43,20 @@ Route::put('/dorms/update/{id}', [DormController::class, 'updateDorm']);
 Route::delete('/dorms/delete/{id}', [DormController::class, 'deleteDorm']);
 
 
+// Rooms
+Route::get('/rooms', [RoomController::class, 'getAllRooms']);
+Route::get('/rooms/{id}', [RoomController::class, 'getRoomById']);
+Route::get('/rooms/dorm/{dormId}', [RoomController::class, 'getRoomsByDormId']);
+Route::get('/rooms/capacity/{id}', [RoomController::class, 'getRoomCapacity']);
+
+//TODO fix this call
+Route::get('/rooms/search', [RoomController::class, 'searchRooms']);
+
+Route::post('/rooms/load', [RoomController::class, 'loadRoom']);
+
+Route::put('/rooms/update/{id}', [RoomController::class, 'updateRoom']);
+
+Route::delete('/rooms/delete/{id}', [RoomController::class, 'deleteRoom']);
 
 
 // routes/api.php
