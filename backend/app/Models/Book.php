@@ -19,6 +19,15 @@ class Book extends Model
         'cover_image_url',
     ];
 
+    public function copies()
+    {
+        return $this->hasMany(BookCopy::class);
+    }
+
+
+
+
+
     public function getAllBooks()
     {
         return $this->all();
