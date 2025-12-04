@@ -18,6 +18,7 @@ class Student extends Model
         'date_of_birth',
         'gender',
         'student_index',
+        'isbn',
         'year_of_study',
         'department',
         'status',
