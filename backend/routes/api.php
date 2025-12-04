@@ -6,6 +6,7 @@ use App\Http\Controllers\LibraryController;
 use App\Http\Controllers\DormController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\BorrowingController;
 
 //---
 
@@ -28,6 +29,9 @@ Route::post('/books/load', [LibraryController::class, 'loadBook']);
 Route::delete('/books/delete/{isbn}', [LibraryController::class, 'deleteBook']);
 
 
+
+
+
 // Dorms
 Route::get('/dorms', [DormController::class, 'getAllDorms']);
 Route::get('/dorms/{id}', [DormController::class, 'getDormById']);
@@ -44,6 +48,9 @@ Route::put('/dorms/update/{id}', [DormController::class, 'updateDorm']);
 Route::delete('/dorms/delete/{id}', [DormController::class, 'deleteDorm']);
 
 
+
+
+
 // Rooms
 Route::get('/rooms', [RoomController::class, 'getAllRooms']);
 Route::get('/rooms/{id}', [RoomController::class, 'getRoomById']);
@@ -58,6 +65,9 @@ Route::post('/rooms/load', [RoomController::class, 'loadRoom']);
 Route::put('/rooms/update/{id}', [RoomController::class, 'updateRoom']);
 
 Route::delete('/rooms/delete/{id}', [RoomController::class, 'deleteRoom']);
+
+
+
 
 
 //students
@@ -79,6 +89,13 @@ Route::put('/students/{id}', [StudentController::class, 'updateStudent']);
 Route::delete('/students/{id}', [StudentController::class, 'deleteStudent']);
 
 
+
+
+
+
+// --- Borowing ---
+Route::post('/borrowings/borrow', [BorrowingController::class, 'borrow']);
+Route::post('/borrowings/return', [BorrowingController::class, 'return']);
 
 
 
