@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LibraryController;
 use App\Http\Controllers\DormController;
 use App\Http\Controllers\RoomController;
+use App\Http\Controllers\StudentController;
 
 //---
 
@@ -57,6 +58,28 @@ Route::post('/rooms/load', [RoomController::class, 'loadRoom']);
 Route::put('/rooms/update/{id}', [RoomController::class, 'updateRoom']);
 
 Route::delete('/rooms/delete/{id}', [RoomController::class, 'deleteRoom']);
+
+
+//students
+Route::get('/students', [StudentController::class, 'getAllStudents']);
+
+Route::get('/students/index/{index}', [StudentController::class, 'getStudentByIndex']);
+Route::get('/students/department/{code}', [StudentController::class, 'getStudentsByDepartment']);
+// Year of study
+Route::get('/students/year/{year}', [StudentController::class, 'getStudentsByYear']);
+// Active / Inactive
+Route::get('/students/active', [StudentController::class, 'getActiveStudents']);
+Route::get('/students/inactive', [StudentController::class, 'getInactiveStudents']);
+
+
+Route::get('/students/{id}', [StudentController::class, 'getStudentById']);
+
+Route::post('/students', [StudentController::class, 'createStudent']);
+Route::put('/students/{id}', [StudentController::class, 'updateStudent']);
+Route::delete('/students/{id}', [StudentController::class, 'deleteStudent']);
+
+
+
 
 
 // routes/api.php

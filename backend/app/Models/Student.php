@@ -43,4 +43,61 @@ class Student extends Model
             }
         });
     }
+
+
+    public function getAllStudents()
+    {
+        return $this->all();
+    }
+
+    public function getAStudentById(int $id)
+    {
+        return $this->findOrFail($id);
+    }
+
+    public function getStudentByIndex(string $index)
+    {
+        return $this->where('student_index', $index)->firstOrFail();
+    }
+
+    public function getStudentsByDepartment(string $department)
+    {
+        return $this->where('department', $department)->get();
+    }
+
+    public function getStudentsByYear(int $year)
+    {
+        return $this->where('year_of_study', $year)->get();
+    }
+
+        public function getActiveStudents()
+    {
+        return $this->where('status', 'active')->get();
+    }
+
+    public function getInactiveStudents()
+    {
+        return $this->where('status', '!=', 'active')->get();
+    }
+
+    public function createStudent(array $data)
+    {
+        return $this->create($data);
+    }
+
+    public function updateStudentById(int $id, array $data)
+    {
+        $student = $this->findOrFail($id);
+        $student->update($data);
+
+        return $student;
+    }
+
+    public function deleteStudentById(int $id)
+    {
+        $student = $this->findOrFail($id);
+        return $student->delete();
+    }
+
+
 }
