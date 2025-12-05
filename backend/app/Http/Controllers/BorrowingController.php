@@ -88,6 +88,17 @@ class BorrowingController extends Controller
         ]);
     }
 
+    public function allBorrowed()
+    {
+        $borrowings = (new Borrowing)->getAllBorrowedWithStudents();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'List of all currently borrowed books.',
+            'data' => $borrowings
+        ]);
+    }
+
 
 
 }

@@ -99,5 +99,18 @@ class Borrowing extends Model
             ->get();
     }
 
+    public function getAllBorrowedWithStudents()
+    {
+        return Borrowing::where('status', 'borrowed')
+            ->with([
+                'student',
+                'bookCopy',
+                'bookCopy.book'
+            ])
+            ->orderBy('borrowed_at', 'desc')
+            ->get();
+    }
+
+
 
 }
