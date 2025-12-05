@@ -94,6 +94,8 @@ Route::delete('/students/{id}', [StudentController::class, 'deleteStudent']);
 
 
 // --- Borowing ---
+Route::get('borrowings/student', [BorrowingController::class, 'studentBorrowings']);
+
 Route::post('/borrowings/borrow', [BorrowingController::class, 'borrow']);
 Route::post('/borrowings/return', [BorrowingController::class, 'return']);
 

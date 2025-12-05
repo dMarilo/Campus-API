@@ -64,5 +64,30 @@ class BorrowingController extends Controller
         }
     }
 
+    public function studentBorrowings(Request $request)
+    {
+        $validated = $request->validate([
+            'student_isbn' => 'required|string|exists:students,isbn',
+            'type'         => 'nullable|string|in:all,current'
+        ]);
+
+        $borrowing = new Borrowing;
+
+        if (($validated['type'] ?? null) === 'current') {
+            $data = $borrowing->getCurrentBorrowed($validated['student_isbn']);
+            $msg  = "Current borrowed books retrieved.";
+        } else {
+            $data = $borrowing->getHistory($validated['student_isbn']);
+            $msg  = "Borrowing history retrieved.";
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => $msg,
+            'data' => $data,
+        ]);
+    }
+
+
 
 }

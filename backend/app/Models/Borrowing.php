@@ -81,5 +81,23 @@ class Borrowing extends Model
         return $borrowing;
     }
 
+    public function getHistory(string $studentIsbn)
+    {
+        return Borrowing::where('student_isbn', $studentIsbn)
+            ->with(['bookCopy', 'bookCopy.book'])
+            ->orderBy('borrowed_at', 'desc')
+            ->get();
+    }
+
+
+    public function getCurrentBorrowed(string $studentIsbn)
+    {
+        return Borrowing::where('student_isbn', $studentIsbn)
+            ->where('status', 'borrowed')
+            ->with(['bookCopy', 'bookCopy.book'])
+            ->orderBy('borrowed_at', 'desc')
+            ->get();
+    }
+
 
 }
