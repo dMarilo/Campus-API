@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
             RoomSeeder::class,
             StudentSeeder::class,
             BookCopySeeder::class,
+            ProfessorSeeder::class,
         ]);
     }
 }

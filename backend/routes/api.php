@@ -7,6 +7,7 @@ use App\Http\Controllers\DormController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\BorrowingController;
+use App\Http\Controllers\ProfessorController;
 
 //---
 
@@ -100,6 +101,18 @@ Route::get('/borrowings/active', [BorrowingController::class, 'allBorrowed']);
 
 Route::post('/borrowings/borrow', [BorrowingController::class, 'borrow']);
 Route::post('/borrowings/return', [BorrowingController::class, 'return']);
+
+
+
+// --- Professors ---
+Route::get('/professors', [ProfessorController::class, 'index']);
+Route::get('/professors/isbn/{isbn}', [ProfessorController::class, 'showByIsbn']);
+Route::get('/professors/department/{department}', [ProfessorController::class, 'showByDepartment']);
+Route::get('/professors/{id}', [ProfessorController::class, 'showById']);
+
+Route::post('/professors', [ProfessorController::class, 'store']);
+Route::put('/professors/{id}', [ProfessorController::class, 'update']);
+Route::delete('/professors/{id}', [ProfessorController::class, 'destroy']);
 
 
 
