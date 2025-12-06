@@ -8,6 +8,7 @@ use App\Http\Controllers\RoomController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\BorrowingController;
 use App\Http\Controllers\ProfessorController;
+use App\Http\Controllers\CourseController;
 
 //---
 
@@ -114,6 +115,22 @@ Route::post('/professors', [ProfessorController::class, 'store']);
 Route::put('/professors/{id}', [ProfessorController::class, 'update']);
 Route::delete('/professors/{id}', [ProfessorController::class, 'destroy']);
 
+
+
+
+// --- Courses ---
+
+// READ
+Route::get('/courses', [CourseController::class, 'index']);
+Route::get('/courses/code/{code}', [CourseController::class, 'showByCode']);
+Route::get('/courses/department/{department}', [CourseController::class, 'showByDepartment']);
+Route::get('/courses/active', [CourseController::class, 'active']);
+Route::get('/courses/{id}', [CourseController::class, 'showById']);
+
+// WRITE
+Route::post('/courses', [CourseController::class, 'store']);
+Route::put('/courses/{id}', [CourseController::class, 'update']);
+Route::delete('/courses/{id}', [CourseController::class, 'destroy']);
 
 
 // routes/api.php
