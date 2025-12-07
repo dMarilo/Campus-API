@@ -14,4 +14,10 @@ class Semester extends Model
         'code',
         'order',
     ];
+
+    public function academicYear()
+    {
+        return $this->belongsTo(AcademicYear::class);
+    }
+
 }

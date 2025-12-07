@@ -15,4 +15,9 @@ class AcademicYear extends Model
         'end_date',
         'is_active',
     ];
+
+    public function semesters()
+    {
+        return $this->hasMany(Semester::class);
+    }
 }

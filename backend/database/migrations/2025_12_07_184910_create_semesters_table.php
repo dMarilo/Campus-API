@@ -9,7 +9,9 @@ return new class extends Migration {
     {
         Schema::create('semesters', function (Blueprint $table) {
             $table->id();
-
+             $table->foreignId('academic_year_id')
+                  ->constrained('academic_years')
+                  ->cascadeOnDelete();
             $table->string('name');          // Winter / Summer
             $table->string('code', 10);      // W / S
             $table->unsignedTinyInteger('order'); // 1 = Winter, 2 = Summer
