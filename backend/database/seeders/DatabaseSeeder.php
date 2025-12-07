@@ -16,6 +16,8 @@ class DatabaseSeeder extends Seeder
             BookCopySeeder::class,
             ProfessorSeeder::class,
             CourseSeeder::class,
+            AcademicYearSeeder::class,
+            SemesterSeeder::class,
         ]);
     }
 }
