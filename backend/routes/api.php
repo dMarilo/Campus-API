@@ -9,6 +9,7 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\BorrowingController;
 use App\Http\Controllers\ProfessorController;
 use App\Http\Controllers\CourseController;
+use App\Http\Controllers\CourseBookController;
 
 //---
 
@@ -135,3 +136,6 @@ Route::delete('/courses/{id}', [CourseController::class, 'destroy']);
 
 // routes/api.php
 
+
+
+Route::get('/courses/{id}/books', [CourseBookController::class, 'getByCourse']);

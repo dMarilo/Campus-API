@@ -20,6 +20,13 @@ class Course extends Model
         'status',
     ];
 
+
+    public function books()
+    {
+        return $this->belongsToMany(Book::class, 'course_book');
+    }
+
+
     /* =============================
      | Query methods
      |============================= */
