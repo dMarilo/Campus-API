@@ -69,17 +69,27 @@ class Borrowing extends Model
         // 2. Fetch book copy
         $copy = BookCopy::where('isbn', $bookIsbn)->firstOrFail();
 
-        // 3. Mark book copy as available again
+        // 3. Fetch related book
+        $book = $copy->book;
+
+        // 4. Mark book copy as available again
         $copy->status = 'available';
         $copy->save();
 
-        // 4. Update borrowing record
+        // 5. Increase available copies (guarded)
+        if ($book->available_copies < $book->total_copies) {
+            $book->available_copies += 1;
+            $book->save();
+        }
+
+        // 6. Update borrowing record
         $borrowing->status = 'returned';
         $borrowing->returned_at = now();
         $borrowing->save();
 
         return $borrowing;
     }
+
 
     public function getHistory(string $studentIsbn)
     {
