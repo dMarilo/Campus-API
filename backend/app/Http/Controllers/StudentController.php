@@ -7,9 +7,14 @@ use Illuminate\Http\Request;
 
 class StudentController extends Controller
 {
-    // ------------------------------------------------
-    // GET ALL STUDENTS
-    // ------------------------------------------------
+    /**
+     * Retrieves all students.
+     *
+     * This endpoint returns a complete list of students
+     * regardless of their status.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getAllStudents()
     {
         $students = (new Student)->getAllStudents();
@@ -20,9 +25,12 @@ class StudentController extends Controller
         ]);
     }
 
-        // ------------------------------------------------
-    // GET STUDENT BY ID
-    // ------------------------------------------------
+    /**
+     * Retrieves a student by their unique identifier.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getStudentById($id)
     {
         $student = (new Student)->getAStudentById($id);
@@ -33,9 +41,12 @@ class StudentController extends Controller
         ]);
     }
 
-    // ------------------------------------------------
-    // GET STUDENT BY INDEX
-    // ------------------------------------------------
+    /**
+     * Retrieves a student by their student index number.
+     *
+     * @param string $index
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getStudentByIndex($index)
     {
         $student = Student::where('student_index', $index)->firstOrFail();
@@ -46,9 +57,17 @@ class StudentController extends Controller
         ]);
     }
 
+    /**
+     * Retrieves students belonging to a specific department.
+     *
+     * The department is provided as a short code which is internally
+     * mapped to a full department name.
+     *
+     * @param string $code
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getStudentsByDepartment($code)
     {
-        // Map short codes → full department names
         $departments = [
             'e'  => 'Elektrotehnika',
             'ri' => 'Računarstvo i informatika',
@@ -63,7 +82,6 @@ class StudentController extends Controller
 
         $department = $departments[$code];
 
-        // Fetch students
         $students = (new Student)->getStudentsByDepartment($department);
 
         return response()->json([
@@ -72,9 +90,12 @@ class StudentController extends Controller
         ]);
     }
 
-    // ------------------------------------------------
-    // GET STUDENTS BY YEAR OF STUDY
-    // ------------------------------------------------
+    /**
+     * Retrieves students by their year of study.
+     *
+     * @param int $year
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getStudentsByYear($year)
     {
         $students = (new Student)->getStudentsByYear((int)$year);
@@ -85,9 +106,11 @@ class StudentController extends Controller
         ]);
     }
 
-    // ------------------------------------------------
-    // GET ACTIVE STUDENTS
-    // ------------------------------------------------
+    /**
+     * Retrieves all students who are currently marked as active.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getActiveStudents()
     {
         $students = (new Student)->getActiveStudents();
@@ -98,9 +121,11 @@ class StudentController extends Controller
         ]);
     }
 
-    // ------------------------------------------------
-    // GET INACTIVE STUDENTS
-    // ------------------------------------------------
+    /**
+     * Retrieves all students who are not currently active.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getInactiveStudents()
     {
         $students = (new Student)->getInactiveStudents();
@@ -111,6 +136,15 @@ class StudentController extends Controller
         ]);
     }
 
+    /**
+     * Creates a new student record.
+     *
+     * The request data is validated and passed to the Student model.
+     * Password hashing is handled automatically at the model level.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function createStudent(Request $request)
     {
         $validated = $request->validate([
@@ -138,6 +172,15 @@ class StudentController extends Controller
         ], 201);
     }
 
+    /**
+     * Updates an existing student record.
+     *
+     * Only the provided fields are updated.
+     *
+     * @param Request $request
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function updateStudent(Request $request, $id)
     {
         $validated = $request->validate([
@@ -165,6 +208,14 @@ class StudentController extends Controller
         ]);
     }
 
+    /**
+     * Deletes a student record.
+     *
+     * This operation permanently removes the student from the system.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function deleteStudent($id)
     {
         $result = (new Student)->deleteStudentById((int)$id);
@@ -174,8 +225,4 @@ class StudentController extends Controller
             'message' => 'Student successfully deleted.'
         ]);
     }
-
-
-
-
 }

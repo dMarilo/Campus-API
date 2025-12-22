@@ -7,13 +7,27 @@ use Illuminate\Http\Request;
 
 class ProfessorController extends Controller
 {
+    /**
+     * Professor model instance.
+     * Used to manage professor-related data and operations.
+     */
     protected Professor $professor;
 
+    /**
+     * Injects the Professor model into the controller.
+     *
+     * @param Professor $professor
+     */
     public function __construct(Professor $professor)
     {
         $this->professor = $professor;
     }
 
+    /**
+     * Retrieves all professors.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function index()
     {
         return response()->json(
@@ -21,6 +35,12 @@ class ProfessorController extends Controller
         );
     }
 
+    /**
+     * Retrieves a professor by their unique identifier.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function showById(int $id)
     {
         return response()->json(
@@ -28,6 +48,12 @@ class ProfessorController extends Controller
         );
     }
 
+    /**
+     * Retrieves a professor by their ISBN identifier.
+     *
+     * @param string $isbn
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function showByIsbn(string $isbn)
     {
         return response()->json(
@@ -35,6 +61,12 @@ class ProfessorController extends Controller
         );
     }
 
+    /**
+     * Retrieves all professors belonging to a specific department.
+     *
+     * @param string $department
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function showByDepartment(string $department)
     {
         return response()->json(
@@ -42,6 +74,15 @@ class ProfessorController extends Controller
         );
     }
 
+    /**
+     * Creates a new professor record.
+     *
+     * The request data is filtered using the model's fillable attributes
+     * to ensure safe mass assignment.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function store(Request $request)
     {
         $professor = $this->professor->createProfessor(
@@ -51,6 +92,13 @@ class ProfessorController extends Controller
         return response()->json($professor, 201);
     }
 
+    /**
+     * Updates an existing professor record.
+     *
+     * @param Request $request
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function update(Request $request, int $id)
     {
         $professor = $this->professor->updateProfessor(
@@ -61,6 +109,12 @@ class ProfessorController extends Controller
         return response()->json($professor);
     }
 
+    /**
+     * Deletes a professor record from the database.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function destroy(int $id)
     {
         $this->professor->deleteProfessor($id);
