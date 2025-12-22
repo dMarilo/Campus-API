@@ -20,4 +20,23 @@ class CourseClass extends Model
         'capacity',
         'status',
     ];
+
+    public function professors()
+    {
+        return $this->belongsToMany(
+            Professor::class,
+            'course_class_professor',
+            'course_class_id',
+            'professor_id'
+        )->withPivot([
+            'role',
+            'hours_per_week',
+            'status'
+        ])->withTimestamps();
+    }
+
+    public function course()
+    {
+        return $this->belongsTo(Course::class);
+    }
 }
