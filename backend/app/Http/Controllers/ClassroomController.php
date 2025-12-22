@@ -5,14 +5,17 @@ namespace App\Http\Controllers;
 use App\Models\Classroom;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use App\Models\CourseClassProfessor;
 
 class ClassroomController extends Controller
 {
     protected Classroom $classroom;
+    protected CourseClassProfessor $assignment;
 
-    public function __construct(Classroom $classroom)
+    public function __construct(Classroom $classroom, CourseClassProfessor $assignment)
     {
         $this->classroom = $classroom;
+        $this->assignment = $assignment;
     }
 
     /**
@@ -118,6 +121,21 @@ class ClassroomController extends Controller
         }
 
         return response()->json(['message' => 'Classroom deactivated']);
+    }
+
+    public function scan(Request $request): JsonResponse
+    {
+        $request->validate([
+            'isbn' => 'required|string',
+            'pin'  => 'required|string',
+        ]);
+
+        $class = $this->assignment->resolveClassByIsbnAndPin(
+            $request->isbn,
+            $request->pin
+        );
+
+        return response()->json($class);
     }
 }
 

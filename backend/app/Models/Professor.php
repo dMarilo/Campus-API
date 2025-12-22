@@ -23,6 +23,20 @@ class Professor extends Model
         'office_hours',
     ];
 
+    public function courseClasses()
+    {
+        return $this->belongsToMany(
+            CourseClass::class,
+            'course_class_professor',
+            'professor_id',
+            'course_class_id'
+        )->withPivot([
+            'role',
+            'hours_per_week',
+            'status'
+        ])->withTimestamps();
+    }
+
         /* =============================
      | Query methods (non-static)
      |============================= */

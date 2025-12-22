@@ -12,6 +12,7 @@ use App\Http\Controllers\CourseController;
 use App\Http\Controllers\CourseBookController;
 use App\Http\Controllers\BuildingController;
 use App\Http\Controllers\ClassroomController;
+use App\Http\Controllers\CourseClassController;
 
 //---
 
@@ -163,5 +164,15 @@ Route::prefix('classrooms')->group(function () {
     Route::post('/', [ClassroomController::class, 'store']);
     Route::put('/{id}', [ClassroomController::class, 'update']);
     Route::delete('/{id}', [ClassroomController::class, 'destroy']);
+
+    Route::post('/scan', [ClassroomController::class, 'scan']);
+
 });
+
+
+
+
+Route::get('/classes/{id}/professors', [CourseClassController::class, 'professors']);
+
+
 
