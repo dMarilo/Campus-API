@@ -10,6 +10,7 @@ use App\Http\Controllers\BorrowingController;
 use App\Http\Controllers\ProfessorController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\CourseBookController;
+use App\Http\Controllers\BuildingController;
 
 //---
 
@@ -131,3 +132,20 @@ Route::delete('/courses/{id}', [CourseController::class, 'destroy']);
 
 
 Route::get('/courses/{id}/books', [CourseBookController::class, 'getByCourse']);
+
+
+
+
+
+
+
+Route::prefix('buildings')->group(function () {
+    Route::get('/', [BuildingController::class, 'index']);
+    Route::get('/{code}', [BuildingController::class, 'showByCode']);
+
+
+    Route::post('/', [BuildingController::class, 'store']);
+    Route::put('/{id}', [BuildingController::class, 'update']);
+    Route::delete('/{id}', [BuildingController::class, 'destroy']);
+});
+
