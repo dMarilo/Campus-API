@@ -9,6 +9,10 @@ class Borrowing extends Model
 {
     use HasFactory;
 
+    /**
+     * Mass-assignable attributes for the Borrowing model.
+     * Represents a single borrowing transaction between a student and a book copy.
+     */
     protected $fillable = [
         'student_isbn',
         'book_isbn',
@@ -18,16 +22,39 @@ class Borrowing extends Model
         'status',
     ];
 
+    /**
+     * Defines the relationship between a borrowing record and a student.
+     * A borrowing belongs to one student, identified by ISBN.
+     */
     public function student()
     {
         return $this->belongsTo(Student::class, 'student_isbn', 'isbn');
     }
 
+    /**
+     * Defines the relationship between a borrowing record and a specific book copy.
+     * A borrowing is associated with exactly one physical book copy.
+     */
     public function bookCopy()
     {
         return $this->belongsTo(BookCopy::class, 'book_isbn', 'isbn');
     }
 
+    /**
+     * Handles the borrowing of a book copy by a student.
+     *
+     * This method:
+     *  - Validates the existence of the student and book copy
+     *  - Ensures the book copy is available
+     *  - Decreases the available copies of the related book
+     *  - Marks the book copy as borrowed
+     *  - Creates a new borrowing record with a due date
+     *
+     * @param string $studentIsbn
+     * @param string $bookIsbn
+     * @return Borrowing
+     * @throws \Exception
+     */
     public function borrowBook(string $studentIsbn, string $bookIsbn)
     {
         $student = Student::where('isbn', $studentIsbn)->firstOrFail();
@@ -58,31 +85,36 @@ class Borrowing extends Model
         ]);
     }
 
+    /**
+     * Handles the return of a borrowed book copy by a student.
+     *
+     * This method:
+     *  - Finds the active borrowing record
+     *  - Marks the book copy as available
+     *  - Increases the available copies of the related book (with safety check)
+     *  - Updates the borrowing record with return information
+     *
+     * @param string $studentIsbn
+     * @param string $bookIsbn
+     * @return Borrowing
+     */
     public function returnBook(string $studentIsbn, string $bookIsbn)
     {
-        // 1. Find active borrowing
         $borrowing = Borrowing::where('student_isbn', $studentIsbn)
             ->where('book_isbn', $bookIsbn)
             ->where('status', 'borrowed')
             ->firstOrFail();
 
-        // 2. Fetch book copy
         $copy = BookCopy::where('isbn', $bookIsbn)->firstOrFail();
-
-        // 3. Fetch related book
         $book = $copy->book;
-
-        // 4. Mark book copy as available again
         $copy->status = 'available';
         $copy->save();
 
-        // 5. Increase available copies (guarded)
         if ($book->available_copies < $book->total_copies) {
             $book->available_copies += 1;
             $book->save();
         }
 
-        // 6. Update borrowing record
         $borrowing->status = 'returned';
         $borrowing->returned_at = now();
         $borrowing->save();
@@ -90,7 +122,13 @@ class Borrowing extends Model
         return $borrowing;
     }
 
-
+    /**
+     * Retrieves the full borrowing history for a given student.
+     * Includes returned and currently borrowed books.
+     *
+     * @param string $studentIsbn
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
     public function getHistory(string $studentIsbn)
     {
         return Borrowing::where('student_isbn', $studentIsbn)
@@ -99,7 +137,12 @@ class Borrowing extends Model
             ->get();
     }
 
-
+    /**
+     * Retrieves all currently borrowed (active) books for a given student.
+     *
+     * @param string $studentIsbn
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
     public function getCurrentBorrowed(string $studentIsbn)
     {
         return Borrowing::where('student_isbn', $studentIsbn)
@@ -109,6 +152,13 @@ class Borrowing extends Model
             ->get();
     }
 
+    /**
+     * Retrieves all active borrowings across the system,
+     * including student and book information.
+     * Intended for administrative or librarian views.
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
     public function getAllBorrowedWithStudents()
     {
         return Borrowing::where('status', 'borrowed')
@@ -120,7 +170,4 @@ class Borrowing extends Model
             ->orderBy('borrowed_at', 'desc')
             ->get();
     }
-
-
-
 }
