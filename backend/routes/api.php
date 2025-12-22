@@ -11,6 +11,7 @@ use App\Http\Controllers\ProfessorController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\CourseBookController;
 use App\Http\Controllers\BuildingController;
+use App\Http\Controllers\ClassroomController;
 
 //---
 
@@ -147,5 +148,20 @@ Route::prefix('buildings')->group(function () {
     Route::post('/', [BuildingController::class, 'store']);
     Route::put('/{id}', [BuildingController::class, 'update']);
     Route::delete('/{id}', [BuildingController::class, 'destroy']);
+});
+
+
+
+
+
+Route::prefix('classrooms')->group(function () {
+    Route::get('/', [ClassroomController::class, 'index']);
+    Route::get('/active', [ClassroomController::class, 'active']);
+    Route::get('/inactive', [ClassroomController::class, 'inactive']);
+    Route::get('/code/{code}', [ClassroomController::class, 'showByCode']);
+
+    Route::post('/', [ClassroomController::class, 'store']);
+    Route::put('/{id}', [ClassroomController::class, 'update']);
+    Route::delete('/{id}', [ClassroomController::class, 'destroy']);
 });
 
