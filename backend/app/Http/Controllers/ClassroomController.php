@@ -9,9 +9,24 @@ use App\Models\CourseClassProfessor;
 
 class ClassroomController extends Controller
 {
+    /**
+     * Classroom model instance.
+     * Used to manage classroom-related data and operations.
+     */
     protected Classroom $classroom;
+
+    /**
+     * CourseClassProfessor model instance.
+     * Used to resolve teaching assignments for classroom scanning.
+     */
     protected CourseClassProfessor $assignment;
 
+    /**
+     * Injects required model dependencies into the controller.
+     *
+     * @param Classroom $classroom
+     * @param CourseClassProfessor $assignment
+     */
     public function __construct(Classroom $classroom, CourseClassProfessor $assignment)
     {
         $this->classroom = $classroom;
@@ -19,7 +34,11 @@ class ClassroomController extends Controller
     }
 
     /**
-     * Get all rooms
+     * Retrieves all classrooms.
+     *
+     * This endpoint returns all rooms regardless of their active status.
+     *
+     * @return JsonResponse
      */
     public function index(): JsonResponse
     {
@@ -29,7 +48,12 @@ class ClassroomController extends Controller
     }
 
     /**
-     * Get room by code
+     * Retrieves a classroom by its unique code.
+     *
+     * If the classroom does not exist, a 404 response is returned.
+     *
+     * @param string $code
+     * @return JsonResponse
      */
     public function showByCode(string $code): JsonResponse
     {
@@ -43,7 +67,9 @@ class ClassroomController extends Controller
     }
 
     /**
-     * Get active rooms
+     * Retrieves all active classrooms.
+     *
+     * @return JsonResponse
      */
     public function active(): JsonResponse
     {
@@ -53,7 +79,9 @@ class ClassroomController extends Controller
     }
 
     /**
-     * Get inactive rooms
+     * Retrieves all inactive classrooms.
+     *
+     * @return JsonResponse
      */
     public function inactive(): JsonResponse
     {
@@ -63,7 +91,13 @@ class ClassroomController extends Controller
     }
 
     /**
-     * Create room
+     * Creates a new classroom.
+     *
+     * The provided request data is forwarded to the Classroom model,
+     * which handles persistence.
+     *
+     * @param Request $request
+     * @return JsonResponse
      */
     public function store(Request $request): JsonResponse
     {
@@ -84,7 +118,13 @@ class ClassroomController extends Controller
     }
 
     /**
-     * Update room
+     * Updates an existing classroom.
+     *
+     * If the classroom does not exist, a 404 response is returned.
+     *
+     * @param Request $request
+     * @param int $id
+     * @return JsonResponse
      */
     public function update(Request $request, int $id): JsonResponse
     {
@@ -110,7 +150,13 @@ class ClassroomController extends Controller
     }
 
     /**
-     * Delete room (deactivate)
+     * Deactivates a classroom instead of permanently deleting it.
+     *
+     * This logical delete preserves historical data while
+     * removing the classroom from active usage.
+     *
+     * @param int $id
+     * @return JsonResponse
      */
     public function destroy(int $id): JsonResponse
     {
@@ -123,6 +169,18 @@ class ClassroomController extends Controller
         return response()->json(['message' => 'Classroom deactivated']);
     }
 
+    /**
+     * Resolves the course class currently being held in a classroom
+     * based on a professor's ISBN and assignment PIN.
+     *
+     * This endpoint is used by the classroom scanner use-case and:
+     *  - Validates the professor's identity
+     *  - Validates the teaching assignment via PIN
+     *  - Returns the associated course class with course information
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function scan(Request $request): JsonResponse
     {
         $request->validate([
@@ -138,4 +196,3 @@ class ClassroomController extends Controller
         return response()->json($class);
     }
 }
-

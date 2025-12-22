@@ -8,9 +8,13 @@ use App\Models\Dorm;
 
 class DormController extends Controller
 {
-    // ---------------------------------------------
-    // GET ALL
-    // ---------------------------------------------
+    /**
+     * Retrieves all dormitories.
+     *
+     * This endpoint returns a list of all dorms stored in the system.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getAllDorms()
     {
         $dorms = (new Dorm)->getAllDorms();
@@ -21,9 +25,12 @@ class DormController extends Controller
         ]);
     }
 
-    // ---------------------------------------------
-    // GET ONE
-    // ---------------------------------------------
+    /**
+     * Retrieves a dormitory by its unique identifier.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getDormById($id)
     {
         $dorm = (new Dorm)->getDormById($id);
@@ -34,9 +41,15 @@ class DormController extends Controller
         ]);
     }
 
-    // ---------------------------------------------
-    // SEARCH BY NAME
-    // ---------------------------------------------
+    /**
+     * Searches dormitories by name.
+     *
+     * This endpoint supports partial name matching and is intended
+     * for quick lookup and filtering.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function searchDorms(Request $request)
     {
         $request->validate([
@@ -53,10 +66,15 @@ class DormController extends Controller
         ]);
     }
 
-
-    // ---------------------------------------------
-    // CREATE NEW DORM
-    // ---------------------------------------------
+    /**
+     * Creates and stores a new dormitory.
+     *
+     * The request data is validated and passed to the Dorm model
+     * for persistence.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function loadDorm(Request $request)
     {
         $validated = $request->validate([
@@ -76,9 +94,15 @@ class DormController extends Controller
         ], 201);
     }
 
-    // ---------------------------------------------
-    // UPDATE DORM
-    // ---------------------------------------------
+    /**
+     * Updates an existing dormitory.
+     *
+     * Only the provided fields are updated.
+     *
+     * @param Request $request
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function updateDorm(Request $request, $id)
     {
         $validated = $request->validate([
@@ -98,9 +122,14 @@ class DormController extends Controller
         ]);
     }
 
-    // ---------------------------------------------
-    // DELETE DORM
-    // ---------------------------------------------
+    /**
+     * Deletes a dormitory.
+     *
+     * This operation permanently removes the dormitory record.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function deleteDorm($id)
     {
         (new Dorm)->deleteDorm($id);
@@ -111,9 +140,12 @@ class DormController extends Controller
         ]);
     }
 
-    // ---------------------------------------------
-    // EXTRA INFO: CAPACITY
-    // ---------------------------------------------
+    /**
+     * Retrieves the total bed capacity of a dormitory.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getDormCapacity($id)
     {
         $capacity = (new Dorm)->getDormCapacity($id);
@@ -124,9 +156,12 @@ class DormController extends Controller
         ]);
     }
 
-    // ---------------------------------------------
-    // EXTRA INFO: ROOM COUNT
-    // ---------------------------------------------
+    /**
+     * Retrieves the total number of rooms in a dormitory.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getDormRoomCount($id)
     {
         $rooms = (new Dorm)->getDormRoomCount($id);

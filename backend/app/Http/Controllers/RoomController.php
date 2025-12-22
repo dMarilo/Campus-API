@@ -7,9 +7,13 @@ use App\Models\Room;
 
 class RoomController extends Controller
 {
-    // ------------------------------------------------
-    // GET ALL ROOMS
-    // ------------------------------------------------
+    /**
+     * Retrieves all rooms.
+     *
+     * This endpoint returns a list of all dorm rooms stored in the system.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getAllRooms()
     {
         $rooms = (new Room)->getAllRooms();
@@ -20,9 +24,12 @@ class RoomController extends Controller
         ]);
     }
 
-    // ------------------------------------------------
-    // GET ROOM BY ID
-    // ------------------------------------------------
+    /**
+     * Retrieves a room by its unique identifier.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getRoomById($id)
     {
         $room = (new Room)->getRoomById($id);
@@ -33,9 +40,12 @@ class RoomController extends Controller
         ]);
     }
 
-    // ------------------------------------------------
-    // GET ROOMS BY DORM ID
-    // ------------------------------------------------
+    /**
+     * Retrieves all rooms belonging to a specific dormitory.
+     *
+     * @param int $dormId
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getRoomsByDormId($dormId)
     {
         $rooms = (new Room)->getRoomsByDormId($dormId);
@@ -46,9 +56,14 @@ class RoomController extends Controller
         ]);
     }
 
-    // ------------------------------------------------
-    // SEARCH ROOMS BY ROOM NUMBER
-    // ------------------------------------------------
+    /**
+     * Searches rooms by room number using partial string matching.
+     *
+     * This endpoint supports quick lookup of rooms within dormitories.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function searchRooms(Request $request)
     {
         $request->validate([
@@ -65,9 +80,14 @@ class RoomController extends Controller
         ]);
     }
 
-    // ------------------------------------------------
-    // CREATE NEW ROOM
-    // ------------------------------------------------
+    /**
+     * Creates and stores a new room.
+     *
+     * Validates room data and associates the room with a dormitory.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function loadRoom(Request $request)
     {
         $validated = $request->validate([
@@ -87,9 +107,15 @@ class RoomController extends Controller
         ], 201);
     }
 
-    // ------------------------------------------------
-    // UPDATE ROOM
-    // ------------------------------------------------
+    /**
+     * Updates an existing room.
+     *
+     * Only the provided fields are updated.
+     *
+     * @param Request $request
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function updateRoom(Request $request, $id)
     {
         $validated = $request->validate([
@@ -109,9 +135,14 @@ class RoomController extends Controller
         ]);
     }
 
-    // ------------------------------------------------
-    // DELETE ROOM
-    // ------------------------------------------------
+    /**
+     * Deletes a room.
+     *
+     * This operation permanently removes the room record.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function deleteRoom($id)
     {
         (new Room)->deleteRoom($id);
@@ -122,9 +153,12 @@ class RoomController extends Controller
         ]);
     }
 
-    // ------------------------------------------------
-    // GET ROOM CAPACITY
-    // ------------------------------------------------
+    /**
+     * Retrieves the maximum occupancy capacity of a room.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getRoomCapacity($id)
     {
         $capacity = (new Room)->getRoomCapacity($id);

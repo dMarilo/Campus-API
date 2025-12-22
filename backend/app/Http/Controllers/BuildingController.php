@@ -8,13 +8,28 @@ use Illuminate\Http\Request;
 
 class BuildingController extends Controller
 {
+    /**
+     * Building model instance.
+     * Used to delegate data access and business logic
+     * related to campus buildings.
+     */
     protected Building $building;
 
+    /**
+     * Injects the Building model into the controller.
+     *
+     * @param Building $building
+     */
     public function __construct(Building $building)
     {
         $this->building = $building;
     }
 
+    /**
+     * Retrieves a list of all active buildings.
+     *
+     * @return JsonResponse
+     */
     public function index(): JsonResponse
     {
         return response()->json(
@@ -22,6 +37,15 @@ class BuildingController extends Controller
         );
     }
 
+    /**
+     * Retrieves a single building by its unique code.
+     *
+     * If the building does not exist or is inactive,
+     * a 404 response is returned.
+     *
+     * @param string $code
+     * @return JsonResponse
+     */
     public function showByCode(string $code): JsonResponse
     {
         $building = $this->building->getBuildingByCode($code);
@@ -33,6 +57,15 @@ class BuildingController extends Controller
         return response()->json($building);
     }
 
+    /**
+     * Creates a new building record.
+     *
+     * The request data is passed to the Building model,
+     * which handles persistence.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function store(Request $request): JsonResponse
     {
         $building = $this->building->createBuilding(
@@ -49,6 +82,15 @@ class BuildingController extends Controller
         return response()->json($building, 201);
     }
 
+    /**
+     * Updates an existing building.
+     *
+     * If the building does not exist, a 404 response is returned.
+     *
+     * @param Request $request
+     * @param int $id
+     * @return JsonResponse
+     */
     public function update(Request $request, int $id): JsonResponse
     {
         $building = $this->building->updateBuilding(
@@ -70,6 +112,15 @@ class BuildingController extends Controller
         return response()->json($building);
     }
 
+    /**
+     * Deactivates a building instead of permanently deleting it.
+     *
+     * This logical delete preserves historical references
+     * while removing the building from active use.
+     *
+     * @param int $id
+     * @return JsonResponse
+     */
     public function destroy(int $id): JsonResponse
     {
         $deleted = $this->building->deleteBuilding($id);
@@ -81,4 +132,3 @@ class BuildingController extends Controller
         return response()->json(['message' => 'Building deactivated']);
     }
 }
-

@@ -8,6 +8,18 @@ use Illuminate\Http\Request;
 
 class BorrowingController extends Controller
 {
+    /**
+     * Handles the borrowing of a book copy by a student.
+     *
+     * This endpoint:
+     *  - Validates the student and book copy identifiers
+     *  - Delegates borrowing logic to the Borrowing model
+     *  - Returns a success response if the borrowing is completed
+     *  - Returns an error response if business rules are violated
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function borrow(Request $request)
     {
         $validated = $request->validate([
@@ -36,6 +48,18 @@ class BorrowingController extends Controller
         }
     }
 
+    /**
+     * Handles the return of a previously borrowed book copy.
+     *
+     * This endpoint:
+     *  - Validates the student and book copy identifiers
+     *  - Delegates return logic to the Borrowing model
+     *  - Updates borrowing status and availability information
+     *  - Returns a success response upon completion
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function return(Request $request)
     {
         $validated = $request->validate([
@@ -64,6 +88,16 @@ class BorrowingController extends Controller
         }
     }
 
+    /**
+     * Retrieves borrowing information for a specific student.
+     *
+     * Depending on the provided type parameter, this endpoint returns:
+     *  - The full borrowing history of the student
+     *  - Or only the currently borrowed books
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function studentBorrowings(Request $request)
     {
         $validated = $request->validate([
@@ -88,6 +122,14 @@ class BorrowingController extends Controller
         ]);
     }
 
+    /**
+     * Retrieves all currently borrowed books across the system.
+     *
+     * This endpoint is intended for administrative or librarian use
+     * and includes student and book information for each borrowing.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function allBorrowed()
     {
         $borrowings = (new Borrowing)->getAllBorrowedWithStudents();
@@ -98,7 +140,4 @@ class BorrowingController extends Controller
             'data' => $borrowings
         ]);
     }
-
-
-
 }
