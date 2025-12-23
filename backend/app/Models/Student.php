@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Student extends Model
 {
@@ -31,6 +32,23 @@ class Student extends Model
         'role',
         'profile_image_url',
     ];
+
+    /**
+     * Defines the many-to-many relationship between a student
+     * and the course classes they are enrolled in.
+     *
+     * A student attends multiple classes, each representing
+     * a specific course taught in a given academic year and semester.
+     */
+    public function classes(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            CourseClass::class,
+            'class_student',
+            'student_id',
+            'class_id'
+        );
+    }
 
     /**
      * Model boot method used to automatically hash passwords.
