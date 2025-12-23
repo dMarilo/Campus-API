@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Student;
 use Illuminate\Http\Request;
+use App\Models\CourseClass;
+use Illuminate\Http\JsonResponse;
 
 class StudentController extends Controller
 {
@@ -225,4 +227,21 @@ class StudentController extends Controller
             'message' => 'Student successfully deleted.'
         ]);
     }
+
+        /**
+         * Returns all students listening to a specific course class.
+         *
+         * @param int $classId
+         * @return JsonResponse
+         */
+        public function getStudentsByClass(int $classId): JsonResponse
+        {
+            $class = CourseClass::findOrFail($classId);
+
+            $students = $class->getListeningStudents();
+
+            return response()->json([
+                'data' => $students,
+            ]);
+        }
 }

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class CourseClass extends Model
 {
@@ -54,6 +55,25 @@ class CourseClass extends Model
     }
 
     /**
+     * Defines the many-to-many relationship between a course class
+     * and the students attending it.
+     *
+     * This relationship represents student enrollment into a specific
+     * class instance (course + academic year + semester).
+     *
+     * The relationship is mediated through the class_student pivot table.
+     */
+    public function students(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Student::class,
+            'class_student',
+            'class_id',
+            'student_id'
+        );
+    }
+
+    /**
      * Defines the relationship between a course class and its base course.
      * A course class is a specific realization of a course
      * within a given academic year and semester.
@@ -61,5 +81,16 @@ class CourseClass extends Model
     public function course()
     {
         return $this->belongsTo(Course::class);
+    }
+
+
+    /**
+     * Returns all students listening to this course class.
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getListeningStudents()
+    {
+        return $this->students()->get();
     }
 }
