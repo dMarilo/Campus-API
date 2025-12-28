@@ -196,3 +196,4 @@ Route::prefix('classrooms')->group(function () {
 */
 
 Route::get('/classes/{id}/professors', [CourseClassController::class, 'professors']);
+Route::post('/classes/{class}/final-exam', [CourseClassController::class, 'registerFinalExam']);

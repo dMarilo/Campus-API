@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
 use App\Models\Professor;
 use App\Models\CourseClass;
+use Illuminate\Support\Facades\DB;
 
 class CourseClassProfessor extends Model
 {
@@ -66,16 +67,37 @@ class CourseClassProfessor extends Model
      * @param string $pin
      * @return CourseClass
      */
-    public function resolveClassByIsbnAndPin(string $isbn, string $pin): CourseClass
+    public function resolveClassByIsbnAndPin(string $isbn, string $pin)
     {
-        $professor = Professor::where('isbn', $isbn)->firstOrFail();
+        return DB::transaction(function () use ($isbn, $pin) {
 
-        $assignment = $this->newQuery()
-            ->where('professor_id', $professor->id)
-            ->where('pin', $pin)
-            ->where('status', 'active')
-            ->firstOrFail();
+            // 1️⃣ Resolve professor
+            $professor = Professor::where('isbn', $isbn)->firstOrFail();
 
-        return CourseClass::with('course')->findOrFail($assignment->course_class_id);
+            // 2️⃣ Resolve active teaching assignment
+            $assignment = $this->newQuery()
+                ->where('professor_id', $professor->id)
+                ->where('pin', $pin)
+                ->where('status', 'active')
+                ->firstOrFail();
+
+            // 3️⃣ Resolve course class
+            $courseClass = CourseClass::with('course')
+                ->lockForUpdate()
+                ->findOrFail($assignment->course_class_id);
+
+            // 4️⃣ Increment iteration (as agreed)
+            $courseClass->increment('iteration');
+
+            // 5️⃣ Resolve attending students
+            $students = $courseClass->students()->get();
+
+            // 6️⃣ Return a neat, explicit response
+            return response()->json([
+                'class' => $courseClass->fresh('course'),
+                'professor' => $professor,
+                'students' => $students,
+            ]);
+        });
     }
 }
