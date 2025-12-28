@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\CourseClassProfessor;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use App\Models\CourseClass;
 
 class CourseClassController extends Controller
 {
@@ -37,5 +39,27 @@ class CourseClassController extends Controller
         $professors = $this->pivot->getProfessorsByCourseClassId($classId);
 
         return response()->json($professors);
+    }
+
+    public function registerFinalExam(int $classId,Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'student_id' => ['required', 'integer', 'exists:students,id'],
+            'final_exam_passed_at' => ['required', 'date'],
+        ]);
+
+        $class = CourseClass::findOrFail($classId);
+
+        $class->registerFinalExamForStudent(
+            $validated['student_id'],
+            $validated['final_exam_passed_at']
+        );
+
+        return response()->json([
+            'message' => 'Final exam date registered.',
+            'class_id' => $classId,
+            'student_id' => $validated['student_id'],
+            'final_exam_passed_at' => $validated['final_exam_passed_at'],
+        ]);
     }
 }

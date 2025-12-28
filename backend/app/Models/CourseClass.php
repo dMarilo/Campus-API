@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Facades\DB;
 
 class CourseClass extends Model
 {
@@ -29,6 +30,7 @@ class CourseClass extends Model
         'year_of_study',
         'group',
         'capacity',
+        'iteration',
         'status',
     ];
 
@@ -92,5 +94,15 @@ class CourseClass extends Model
     public function getListeningStudents()
     {
         return $this->students()->get();
+    }
+    public function registerFinalExamForStudent(int $studentId, string $date): void
+    {
+        DB::table('class_student')
+            ->where('class_id', $this->id)
+            ->where('student_id', $studentId)
+            ->update([
+                'final_exam_passed_at' => $date,
+                // ❌ NO updated_at
+            ]);
     }
 }
